@@ -1,8 +1,11 @@
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Chart from "./Chart";
 
 function CoinInfo({ coinData }) {
-    return (<Row>
+    return (
+        <>
+        <Row>
         <Col>
         <Row>
             <Col>Logo</Col>
@@ -17,7 +20,13 @@ function CoinInfo({ coinData }) {
             <div>Average 69 000</div>
             <div>Change -3%</div>
         </Col>
-    </Row>);
+        </Row>
+        <Row>
+            <Chart />
+        </Row>
+  
+    </>
+    );
 }
 
 export default CoinInfo;
