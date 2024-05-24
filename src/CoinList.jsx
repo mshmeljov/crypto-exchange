@@ -1,9 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Table from 'react-bootstrap/Table';
 import CoinInfoModal from './CoinInfoModal';
 
+
 function CoinList() {
     const [showInfoModal, setShowInfoModal] = React.useState(false);
+    const [selectedCoin, setSelectedCoin] = useState(null);
+
+    const coinNames = ["Bitcoin", "Ethereum", "Tether", "Solana", "BNB"]; 
+
+    const RowClick = (coinName) => {
+        setShowInfoModal(true);
+        setSelectedCoin(coinName);
+      };
 
   return (
     <>
@@ -21,9 +30,10 @@ function CoinList() {
         </tr>
       </thead>
       <tbody>
-        <tr onClick={() => setShowInfoModal(true)}>
-         <td>1</td>
-         <td>Bitcoin</td>
+      {coinNames.map((coin, index) => (
+        <tr key={index} onClick={() => RowClick(coin)}>
+         <td>{index + 1}</td>
+         <td>{coin}</td>
          <td>68000</td>
          <td>XXXXXX</td>
          <td>XXXXXX</td>
@@ -31,9 +41,10 @@ function CoinList() {
          <td>XXXXXX</td>
          <td>XXXXXX</td>
         </tr>
+      ))}
       </tbody>
     </Table>
-    <CoinInfoModal show={showInfoModal} setShow={setShowInfoModal}/>
+    <CoinInfoModal show={showInfoModal} setShow={setShowInfoModal} coinName={selectedCoin}/>
     </>
   );
 }

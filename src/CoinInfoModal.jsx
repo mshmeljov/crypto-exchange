@@ -1,7 +1,8 @@
+import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import CoinInfo from './CoinInfo';
 
-function CoinInfoModal ({ show, setShow}) {
+function CoinInfoModal ({ show, setShow, coinName}) {
     return (
         <Modal
         size="lg"
@@ -15,7 +16,7 @@ function CoinInfoModal ({ show, setShow}) {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            <CoinInfo />
+            <CoinInfo coinName={coinName} />
         </Modal.Body>
       </Modal>
     );
