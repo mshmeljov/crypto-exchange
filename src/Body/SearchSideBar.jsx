@@ -1,16 +1,23 @@
 
+import React from 'react';
 import Offcanvas from 'react-bootstrap/Offcanvas';
+import SearchForm from './SearchForm';
 
 function SearchSideBar({ showSideBar, setShowSideBar }) {
     const handleClose = () => setShowSideBar(false);
+
+    const handleSearch = (searchData) => {
+      console.log('Search Data:', searchData);
+      handleClose();
+  };
+
     return (
         <Offcanvas show={showSideBar} onHide={handleClose} placement="end">
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>Offcanvas</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          Some text as placeholder. In real life you can have the elements you
-          have chosen. Like, text, images, lists, etc.
+        <SearchForm onSearch={handleSearch} />
         </Offcanvas.Body>
       </Offcanvas>
     );
