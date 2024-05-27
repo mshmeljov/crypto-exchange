@@ -1,22 +1,21 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Container from 'react-bootstrap/Container';
+import React from 'react';
+import "bootstrap/dist/css/bootstrap.min.css";
+import Container from "react-bootstrap/Container";
 import Header from "./Header";
-import SubHeader from './SubHeader';
-import CoinList from './CoinList';
+import Body from "./Body";
 
 function App() {
-    return <Container>
-        <Header />
-        <SubHeader />
-        <CoinList />
-    </Container>;
+    const [showSideBar, setShowSideBar] = React.useState(false);
+
+  return (
+    <Container>
+      <Header setShowSideBar={setShowSideBar} />
+      <Body showSideBar={showSideBar} setShowSideBar={setShowSideBar} />
+    </Container>
+  );
 }
 
 export default App;
-
-
-
-
 
 // import './App.css';
 // import TestComponent from './TestComponent';
@@ -33,7 +32,7 @@ export default App;
 //         <TestComponent head={35}/>
 //         <TestComponent head={35}/>
 //         <TestComponent head={35}/> */}
-//         <TestComponent head={35} 
+//         <TestComponent head={35}
 //         footer={<div>Footer Element</div>}
 //         />
 //       </header>
@@ -59,7 +58,6 @@ export default App;
 
 // ReactDOM.render(<App />, document.getElementById('root'));
 
-
 // export default App;
 
 // function App() {
@@ -67,4 +65,3 @@ export default App;
 //     <div className="App"></div>
 //   )
 // }
-
