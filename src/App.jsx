@@ -3,20 +3,36 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Container from "react-bootstrap/Container";
 import Header from "./Header";
 import Body from "./Body";
+import Navigation from "./Header/Navigation";
+
+const initialState = {
+  page: 'main',
+  showSideBar: false,
+};
+
 
 function App() {
-    const [showSideBar, setShowSideBar] = React.useState(false);
-    const [page, setPage] = React.useState('main');
+    const [state, setState] = React.useState(initialState);
+
+
+    // const [showSideBar, setShowSideBar] = React.useState(false);
+    // const [page, setPage] = React.useState('main');
+
+    const setShowSideBar = (show) => setState({ ...state, showSideBar: show });
+    const setPage = (page) => setState({ ...state, page: page });
+    const resetAppState = () => setState(initialState);  
 
   return (
     <Container>
       <Header 
-      setShowSideBar={setShowSideBar} page={page} />
+      setShowSideBar={setShowSideBar} 
+      resetAppState={resetAppState} 
+      />
       <Body 
-      showSideBar={showSideBar} 
+      showSideBar={state.showSideBar} 
       setShowSideBar={setShowSideBar}
       setPage={setPage} 
-      page={page}
+      page={state.page}
       />
     </Container>
   );

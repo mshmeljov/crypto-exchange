@@ -6,9 +6,10 @@ import Button from "react-bootstrap/Button";
 
 
 
-function Navigation ({setShowSideBar}) {
+function Navigation({ setShowSideBar, resetAppState }) {
 
-    return (<Navbar className="bg-body-tertiary">
+    return (
+    <Navbar className="bg-body-tertiary">
     <Container>
       <Navbar.Brand href="#home">
         <img
@@ -22,7 +23,7 @@ function Navigation ({setShowSideBar}) {
       </Navbar.Brand>
 
       <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
+            <Nav.Link href="#home" onClick={resetAppState}>Home</Nav.Link>
             <Nav.Link href="#link">Link</Nav.Link>
             <NavDropdown title="Dropdown" id="basic-nav-dropdown">
               <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
