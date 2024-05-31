@@ -9,38 +9,67 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { getAssetsHistory } from "../../api/assets";
-import { intervals } from "./constants";
-
-
+import { periods } from "./constants";
+import Button from "react-bootstrap/Button";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
+import { buildPeriod, parseTime } from "./utils";
 
 function Chart({ coinData }) {
-  const [interval] = React.useState(intervals[0]);
+  const [period, setPeriod] = React.useState(periods[0]);
   const [chartData, setChartData] = React.useState([]);
 
-
   React.useEffect(() => {
-    getAssetsHistory(coinData.id, interval).then((json) => setChartData(json.data));
-  }, [coinData.id, interval]);
+    const {start, end} = buildPeriod(period); 
+
+    getAssetsHistory(coinData.id, period.interval, start, end).then((json) =>
+      setChartData(
+        json.data.map(({ time, ...rest }) => ({
+          ...rest,
+          date: parseTime(time),
+        }))
+      )
+    );
+  }, [coinData.id, period]);
+
   return (
-    <ResponsiveContainer width="100%" height={500}>
-      <AreaChart
-        width={500}
-        height={400}
-        data={chartData}
-        margin={{
-          top: 10,
-          right: 30,
-          left: 0,
-          bottom: 0,
-        }}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="time" />
-        <YAxis datakey="priceUsd" />
-        <Tooltip />
-        <Area type="monotone" dataKey="priceUsd" stroke="#8884d8" fill="#8884d8" />
-      </AreaChart>
-    </ResponsiveContainer>
+    <>
+      <ResponsiveContainer width="100%" height={500}>
+        <AreaChart
+          width={500}
+          height={400}
+          data={chartData}
+          margin={{
+            top: 10,
+            right: 30,
+            left: 0,
+            bottom: 0,
+          }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="date" />
+          <YAxis datakey="priceUsd" />
+          <Tooltip />
+          <Area
+            type="monotone"
+            dataKey="priceUsd"
+            stroke="#8884d8"
+            fill="#8884d8"
+          />
+        </AreaChart>
+      </ResponsiveContainer>
+      <ButtonGroup size="sm">
+        {periods.map((_period) => (
+          <Button
+            onClick={() => setPeriod(_period)}
+            key={_period.label}
+            variant="outline-primary"
+            active={_period === period.label}
+          >
+            {_period.label}
+          </Button>
+        ))}
+      </ButtonGroup>
+    </>
   );
 }
 
