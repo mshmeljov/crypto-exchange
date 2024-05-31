@@ -11,3 +11,11 @@ export const getAssetsHistory = async (id, interval) => {
 
     return await response.json();
 };
+
+
+
+export const getMoreData = async (id) => {
+  const response = await fetch(`${apiUrl}/assets/${id}`);
+
+  return await response.json();
+};
