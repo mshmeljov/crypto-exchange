@@ -1,0 +1,33 @@
+body {
+    background-color: #ffffff; 
+    font-family: 'Arial', sans-serif;
+    color: #333; 
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+
+.custom-navbar {
+  background-color: #ffffff;
+}
+
+.custom-navbar .navbar-brand,
+.custom-navbar .nav-link,
+.custom-navbar .nav-dropdown-item {
+  color: rgb(0, 0, 0)
+}
+
+.custom-navbar .navbar-brand img {
+  filter: invert(1); 
+}
+
+.navbar-brand {
+  background-color: #111111;
+}

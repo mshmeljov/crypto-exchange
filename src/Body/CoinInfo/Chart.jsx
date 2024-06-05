@@ -13,30 +13,32 @@ import { periods } from "./constants";
 import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import { buildPeriod, parseTime } from "./utils";
+import ErrorModal from "../../ErrorModal";
 
 function Chart({ coinData }) {
   const [period, setPeriod] = React.useState(periods[0]);
   const [chartData, setChartData] = React.useState([]);
+  const [errorMessage, setErrorMessage] = React.useState(null);
 
   React.useEffect(() => {
-    const {start, end} = buildPeriod(period); 
-
-    getAssetsHistory(coinData.id, period.interval, start, end).then((json) =>
-      setChartData(
-        json.data.map(({ time, ...rest }) => ({
-          ...rest,
-          date: parseTime(time),
-        }))
+    const { start, end } = buildPeriod(period);
+    getAssetsHistory(coinData.id, period.interval, start, end)
+      .then((json) =>
+        setChartData(
+          json.data.map(({ time, ...rest }) => ({
+            ...rest,
+            date: parseTime(time, period.dateFormat),
+          }))
+        )
       )
-    );
+      .catch((error) => setErrorMessage(error.message));
   }, [coinData.id, period]);
-
   return (
     <>
       <ResponsiveContainer width="100%" height={500}>
         <AreaChart
           width={500}
-          height={400}
+          height={500}
           data={chartData}
           margin={{
             top: 10,
@@ -47,28 +49,41 @@ function Chart({ coinData }) {
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="date" />
-          <YAxis datakey="priceUsd" />
+          <YAxis dataKey="priceUsd" domain={["dataMin", "dataMax"]} />
           <Tooltip />
+          <defs>
+            <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#129a74" stopOpacity={0.8} />
+              <stop offset="95%" stopColor="#129a74" stopOpacity={0} />
+            </linearGradient>
+          </defs>
           <Area
             type="monotone"
             dataKey="priceUsd"
-            stroke="#8884d8"
-            fill="#8884d8"
+            stroke="#129a74"
+            // fill="#8884d8"
+            fillOpacity={1}
+            fill="url(#colorUv)"
           />
         </AreaChart>
       </ResponsiveContainer>
       <ButtonGroup size="sm">
         {periods.map((_period) => (
           <Button
-            onClick={() => setPeriod(_period)}
             key={_period.label}
+            active={period.label === _period.label}
             variant="outline-primary"
-            active={_period === period.label}
+            onClick={() => setPeriod(_period)}
           >
             {_period.label}
           </Button>
         ))}
       </ButtonGroup>
+      <ErrorModal
+        show={!!errorMessage}
+        handleClose={() => setErrorMessage(null)}
+        errorMessage={errorMessage}
+      />
     </>
   );
 }

@@ -1,48 +1,40 @@
-import React from 'react';
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import React from "react";
 
 function SearchForm({ closeSideBar }) {
-    const [searchData, setSearchData] = React.useState({});
-    
-    const handleOnSubmit = (event) => {
-        event.preventDefault();
+  const [searchData, setSearchData] = React.useState({});
+  const handleOnSubmit = (event) => {
+    event.preventDefault();
+    const coin = event.target.coin.value;
+    const from = event.target.from.value;
+    const dateTo = event.target.dateTo.value;
+    setSearchData({ coin, from, dateTo });
+    closeSideBar();
+  };
 
-        const coin = event.target.coin.value; 
-        const from = event.target.from.value;
-        const to = event.target.to.value;
+  console.log(searchData);
 
-        setSearchData({coin, from, to});
-
-        closeSideBar();
-
-    };
-
-
-    console.log(searchData);
-    
   return (
     <Form onSubmit={handleOnSubmit}>
       <Form.Group className="mb-3" controlId="coin">
         <Form.Label>Coin</Form.Label>
-        <Form.Control type="text" name="coin" placeholder="Enter coin" />
-        <Form.Text className="text-muted">
-          Example "BTC"
-        </Form.Text>
+        <Form.Control type="text" placeholder="Enter coin" name="coin" />
+        <Form.Text className="text-muted">Example: "BTC"</Form.Text>
       </Form.Group>
 
-      <Form.Group className="mb-3" controlId="from">
-        <Form.Label>From</Form.Label>
-        <Form.Control type="date" name="from" placeholder="Date from" />
+      <Form.Group className="mb-3" controlId="from" name="from">
+        <Form.Label>Date from</Form.Label>
+        <Form.Control type="date" placeholder="Date from" />
       </Form.Group>
 
-      <Form.Group className="mb-3" controlId="to">
-        <Form.Label>TO</Form.Label>
-        <Form.Control type="date" name="to" placeholder="Date to" />
+      <Form.Group className="mb-3" controlId="dateTo">
+        <Form.Label>Date to</Form.Label>
+        <Form.Control type="date" placeholder="Date to" name="dateTo" />
       </Form.Group>
-      
+
       <Button variant="primary" type="submit" className="w-100">
-        Submit
+        Search
       </Button>
     </Form>
   );
