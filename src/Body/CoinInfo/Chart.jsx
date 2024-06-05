@@ -14,6 +14,7 @@ import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import { buildPeriod, parseTime } from "./utils";
 import ErrorModal from "../../ErrorModal";
+import { NumericFormat } from 'react-number-format';
 
 function Chart({ coinData }) {
   const [period, setPeriod] = React.useState(periods[0]);
@@ -33,6 +34,20 @@ function Chart({ coinData }) {
       )
       .catch((error) => setErrorMessage(error.message));
   }, [coinData.id, period]);
+
+  const CustomYAxisTick = ({ x, y, payload }) => (
+    <text x={x} y={y} dy={0} dx={-10} fill="#666" textAnchor="end">
+      <NumericFormat
+        value={payload.value}
+        displayType={'text'}
+        thousandSeparator={true}
+        prefix={'$'}
+        decimalScale={2}
+        fixedDecimalScale={true}
+      />
+    </text>
+  );
+
   return (
     <>
       <ResponsiveContainer width="100%" height={500}>
@@ -49,7 +64,7 @@ function Chart({ coinData }) {
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="date" />
-          <YAxis dataKey="priceUsd" domain={["dataMin", "dataMax"]} />
+          <YAxis dataKey="priceUsd" domain={["dataMin", "dataMax"]} tick={<CustomYAxisTick />} />
           <Tooltip />
           <defs>
             <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
@@ -61,7 +76,6 @@ function Chart({ coinData }) {
             type="monotone"
             dataKey="priceUsd"
             stroke="#129a74"
-            // fill="#8884d8"
             fillOpacity={1}
             fill="url(#colorUv)"
           />

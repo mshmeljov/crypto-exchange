@@ -1,4 +1,3 @@
-// import Container from "react-bootstrap/Container";
 import React from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -6,6 +5,7 @@ import Chart from "./Chart";
 import { getAssetsById } from "../../api/assets";
 import "./coinInfo.css";
 import ErrorModal from "../../ErrorModal";
+import { NumericFormat } from 'react-number-format';
 
 function CoinInfo({ coinData }) {
   const [coinInfo, setCoinInfo] = React.useState({});
@@ -16,6 +16,7 @@ function CoinInfo({ coinData }) {
       .then((json) => setCoinInfo(json.data))
       .catch((error) => setErrorMessage(error.message));
   }, [coinData.id]);
+
   return (
     <>
       <Row>
@@ -29,12 +30,52 @@ function CoinInfo({ coinData }) {
           </Row>
         </Col>
         <Col>
-          <div>High 700000</div>
-          <div>Low 670000</div>
+          <div>
+            High{" "}
+            <NumericFormat
+              value={700000}
+              displayType={'text'}
+              thousandSeparator={true}
+              prefix={'$'}
+              decimalScale={2}
+              fixedDecimalScale={true}
+            />
+          </div>
+          <div>
+            Low{" "}
+            <NumericFormat
+              value={670000}
+              displayType={'text'}
+              thousandSeparator={true}
+              prefix={'$'}
+              decimalScale={2}
+              fixedDecimalScale={true}
+            />
+          </div>
         </Col>
         <Col>
-          <div>Average 24h {coinInfo.vwap24Hr}</div>
-          <div>Change 24h {coinInfo.changePercent24Hr}%</div>
+          <div>
+            Average 24h{" "}
+            <NumericFormat
+              value={coinInfo.vwap24Hr}
+              displayType={'text'}
+              thousandSeparator={true}
+              prefix={'$'}
+              decimalScale={2}
+              fixedDecimalScale={true}
+            />
+          </div>
+          <div>
+            Change 24h{" "}
+            <NumericFormat
+              value={coinInfo.changePercent24Hr}
+              displayType={'text'}
+              thousandSeparator={true}
+              suffix={'%'}
+              decimalScale={2}
+              fixedDecimalScale={true}
+            />
+          </div>
         </Col>
       </Row>
       <Row>
