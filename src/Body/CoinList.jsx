@@ -1,43 +1,49 @@
-import React from "react";
 import Table from "react-bootstrap/Table";
+import React from "react";
 import CoinInfoModal from "./CoinInfo/CoinInfoModal";
 import { getAssets } from "../api/assets";
 import { coinDataFormat } from "./utils";
-
-function CoinList({ setPage }) {
+import ErrorModal from "../ErrorModal";
+function CoinsList({ setPage }) {
   const [showInfoModal, setShowInfoModal] = React.useState(false);
   const [coinData, setCoinData] = React.useState({});
   const [coinList, setCoinList] = React.useState([]);
-
+  const [errorMessage, setErrorMessage] = React.useState(null);
+  
   const handleOnClick = (coin) => {
     setShowInfoModal(true);
     setCoinData(coin);
   };
-
+  
   React.useEffect(() => {
-    getAssets().then((json) => setCoinList(json.data));
+    getAssets()
+      .then((json) => setCoinList(json.data))
+      .catch((error) => setErrorMessage(error.message));
   }, []);
 
   return (
     <>
-      <Table striped bordered hover>
+      <Table striped bordered hover responsive>
         <thead>
           <tr>
             <th>Rank</th>
             <th>Name</th>
             <th>Price</th>
             <th>Market Cap</th>
-            <th>VWAP (24Hr)</th>
+            <th>VWAP(24H)</th>
             <th>Supply</th>
-            <th>Volume (24Hr)</th>
-            <th>Change (24Hr)</th>
+            <th>Volume(24H)</th>
+            <th>Change(24H)</th>
           </tr>
         </thead>
         <tbody>
           {coinList.map((coin) => {
             const formatedCoin = coinDataFormat(coin);
             return (
-              <tr key={formatedCoin.id} onClick={() => handleOnClick(coin)}>
+              <tr
+                key={formatedCoin.id}
+                onClick={() => handleOnClick(formatedCoin)}
+              >
                 <td>{formatedCoin.rank}</td>
                 <td>{formatedCoin.name}</td>
                 <td>{formatedCoin.priceUsd}</td>
@@ -51,14 +57,20 @@ function CoinList({ setPage }) {
           })}
         </tbody>
       </Table>
+      {/* передаём состояние из коинлиста */}
       <CoinInfoModal
+        setPage={setPage}
         show={showInfoModal}
         setShow={setShowInfoModal}
         coinData={coinData}
-        setPage={setPage}
+      />
+      <ErrorModal
+        show={!!errorMessage}
+        handleClose={() => setErrorMessage(null)}
+        errorMessage={errorMessage}
       />
     </>
   );
 }
 
-export default CoinList;
+export default CoinsList;
