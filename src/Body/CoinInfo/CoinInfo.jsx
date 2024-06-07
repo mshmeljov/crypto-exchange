@@ -5,81 +5,46 @@ import Chart from "./Chart";
 import { getAssetsById } from "../../api/assets";
 import "./coinInfo.css";
 import ErrorModal from "../../ErrorModal";
-import { NumericFormat } from 'react-number-format';
+import Number from "../../Number";
+import { useParams } from "react-router-dom";
 
 function CoinInfo({ coinData }) {
   const [coinInfo, setCoinInfo] = React.useState({});
   const [errorMessage, setErrorMessage] = React.useState(null);
 
+  const { id, period } = useParams();
+
   React.useEffect(() => {
-    getAssetsById(coinData.id)
+    getAssetsById(coinData?.id || id)
       .then((json) => setCoinInfo(json.data))
       .catch((error) => setErrorMessage(error.message));
-  }, [coinData.id]);
+  }, [coinData?.id, id]);
 
   return (
     <>
       <Row>
         <Col>
-          <Col>
-            <div className="rank">Rank: {coinInfo.rank}</div>
-          </Col>
+          <div className="rank">Rank: {coinInfo.rank}</div>
+        </Col>
+        <Col>
           <Row>
             <Col>Logo</Col>
-            <Col>{coinData.name}</Col>
+            <Col>{coinData?.name}</Col>
           </Row>
         </Col>
         <Col>
-          <div>
-            High{" "}
-            <NumericFormat
-              value={700000}
-              displayType={'text'}
-              thousandSeparator={true}
-              prefix={'$'}
-              decimalScale={2}
-              fixedDecimalScale={true}
-            />
-          </div>
-          <div>
-            Low{" "}
-            <NumericFormat
-              value={670000}
-              displayType={'text'}
-              thousandSeparator={true}
-              prefix={'$'}
-              decimalScale={2}
-              fixedDecimalScale={true}
-            />
-          </div>
+          <div>High 700000</div>
+          <div>Low 670000</div>
         </Col>
         <Col>
           <div>
-            Average 24h{" "}
-            <NumericFormat
-              value={coinInfo.vwap24Hr}
-              displayType={'text'}
-              thousandSeparator={true}
-              prefix={'$'}
-              decimalScale={2}
-              fixedDecimalScale={true}
-            />
+            Average <Number value={coinInfo.vwap24Hr} />
           </div>
-          <div>
-            Change 24h{" "}
-            <NumericFormat
-              value={coinInfo.changePercent24Hr}
-              displayType={'text'}
-              thousandSeparator={true}
-              suffix={'%'}
-              decimalScale={2}
-              fixedDecimalScale={true}
-            />
-          </div>
+          <div>Change {coinInfo.changePercent24Hr}%</div>
         </Col>
       </Row>
       <Row>
-        <Chart coinData={coinData} />
+        <Chart coinData={coinData || { id }} periodParams={period} />
       </Row>
       <ErrorModal
         show={!!errorMessage}

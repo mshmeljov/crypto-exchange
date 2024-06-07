@@ -1,12 +1,12 @@
-import Table from "react-bootstrap/Table";
 import React from "react";
+import Table from "react-bootstrap/Table";
 import CoinInfoModal from "./CoinInfo/CoinInfoModal";
 import { getAssets } from "../api/assets";
 import { coinDataFormat } from "./utils";
 import ErrorModal from "../ErrorModal";
-import { NumericFormat } from 'react-number-format';
+import Number from "../Number";
 
-function CoinsList({ setPage }) {
+function CoinList() {
   const [showInfoModal, setShowInfoModal] = React.useState(false);
   const [coinData, setCoinData] = React.useState({});
   const [coinList, setCoinList] = React.useState([]);
@@ -20,7 +20,7 @@ function CoinsList({ setPage }) {
   React.useEffect(() => {
     getAssets()
       .then((json) => setCoinList(json.data))
-      .catch((error) => setErrorMessage(error.message));
+      .catch((error) => setErrorMessage(error));
   }, []);
 
   return (
@@ -32,89 +32,41 @@ function CoinsList({ setPage }) {
             <th>Name</th>
             <th>Price</th>
             <th>Market Cap</th>
-            <th>VWAP(24H)</th>
+            <th>VWAP (24H)</th>
             <th>Supply</th>
-            <th>Volume(24H)</th>
-            <th>Change(24H)</th>
+            <th>Volume (25H)</th>
+            <th>Change (24H)</th>
           </tr>
         </thead>
         <tbody>
           {coinList.map((coin) => {
             const formatedCoin = coinDataFormat(coin);
             return (
-              <tr
-                key={formatedCoin.id}
-                onClick={() => handleOnClick(formatedCoin)}
-              >
+              <tr key={formatedCoin.id} onClick={() => handleOnClick(coin)}>
                 <td>{formatedCoin.rank}</td>
                 <td>{formatedCoin.name}</td>
                 <td>
-                  <NumericFormat
-                    value={formatedCoin.priceUsd}
-                    displayType={'text'}
-                    thousandSeparator={true}
-                    prefix={'$'}
-                    decimalScale={2}
-                    fixedDecimalScale={true}
-                  />
+                  <Number value={formatedCoin.priceUsd} />
                 </td>
                 <td>
-                  <NumericFormat
-                    value={formatedCoin.marketCapUsd}
-                    displayType={'text'}
-                    thousandSeparator={true}
-                    prefix={'$'}
-                    decimalScale={2}
-                    fixedDecimalScale={true}
-                  />
+                  <Number value={formatedCoin.marketCapUsd} />
                 </td>
                 <td>
-                  <NumericFormat
-                    value={formatedCoin.vwap24Hr}
-                    displayType={'text'}
-                    thousandSeparator={true}
-                    prefix={'$'}
-                    decimalScale={2}
-                    fixedDecimalScale={true}
-                  />
+                  <Number value={formatedCoin.vwap24Hr} />
                 </td>
                 <td>
-                  <NumericFormat
-                    value={formatedCoin.supply}
-                    displayType={'text'}
-                    thousandSeparator={true}
-                    decimalScale={2}
-                    fixedDecimalScale={true}
-                  />
+                  <Number value={formatedCoin.supply} />
                 </td>
                 <td>
-                  <NumericFormat
-                    value={formatedCoin.volumeUsd24Hr}
-                    displayType={'text'}
-                    thousandSeparator={true}
-                    prefix={'$'}
-                    decimalScale={2}
-                    fixedDecimalScale={true}
-                  />
+                  <Number value={formatedCoin.volumeUsd24Hr} />
                 </td>
-                <td>
-                  <NumericFormat
-                    value={formatedCoin.changePercent24Hr}
-                    displayType={'text'}
-                    thousandSeparator={true}
-                    suffix={'%'}
-                    decimalScale={2}
-                    fixedDecimalScale={true}
-                  />
-                </td>
+                <td>{formatedCoin.changePercent24Hr}%</td>
               </tr>
             );
           })}
         </tbody>
       </Table>
-      
       <CoinInfoModal
-        setPage={setPage}
         show={showInfoModal}
         setShow={setShowInfoModal}
         coinData={coinData}
@@ -128,4 +80,4 @@ function CoinsList({ setPage }) {
   );
 }
 
-export default CoinsList;
+export default CoinList;
