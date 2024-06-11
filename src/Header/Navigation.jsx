@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 function Navigation({ setShowSideBar }) {
   return (
-    <Navbar expand="md" className="bg-body-tertiary">
+    <Navbar className="bg-body-tertiary" expand="md">
       <Container fluid>
         <Link to="/" className="navbar-brand">
           <img
@@ -32,11 +32,13 @@ function Navigation({ setShowSideBar }) {
             </Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
-            <Nav className="flex-grow-1 pe-3 my-auto">
-              <Link to="/" className="nav-link">
+            <Nav className="me-auto my-auto">
+              <Link className="nav-link" to="/">
                 Home
               </Link>
-              <Nav.Link href="#link">Contacts</Nav.Link>
+              <Link className="nav-link" to="/contacts/">
+                Contacts
+              </Link>
               <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                 <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.2">
@@ -51,11 +53,11 @@ function Navigation({ setShowSideBar }) {
                 </NavDropdown.Item>
               </NavDropdown>
             </Nav>
-            <Navbar.Text className="justify-content-end d-flex">
+            <Navbar.Text className="justify-content-end">
               <Button
-                onClick={() => setShowSideBar(true)}
                 variant="primary"
                 className="w-100"
+                onClick={() => setShowSideBar(true)}
               >
                 Search
               </Button>
