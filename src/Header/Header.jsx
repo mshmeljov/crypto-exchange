@@ -1,14 +1,15 @@
 import Navigation from "./Navigation";
-import SubHeader from "./SubHeader/Main";
-import { mainSubHeader, pageSubHeader } from "./SubHeader/constants";
-
+import MainSubHeader from "./SubHeader/Main";
+import { mainSubheader } from "./SubHeader/constants";
+import { useMatch } from "react-router-dom";
 
 function Header(props) {
+  const match = useMatch("/");
 
   return (
     <>
       <Navigation {...props} />
-      <SubHeader data={props.page === 'main' ? mainSubHeader : pageSubHeader}/>
+      {match && <MainSubHeader data={mainSubheader} />}
     </>
   );
 }

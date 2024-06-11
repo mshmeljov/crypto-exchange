@@ -1,0 +1,28 @@
+/* src/Contacts.css */
+.contacts-container {
+  max-width: 800px;
+  margin: auto;
+}
+
+.contacts-container .card {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.contacts-container .card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.contacts-container .card-text {
+  margin-bottom: 1.5rem;
+  color: #6c757d;
+}
+
+.contacts-container .row {
+  align-items: center;
+}
+
+.contacts-container .font-weight-bold {
+  font-weight: bold;
+}
