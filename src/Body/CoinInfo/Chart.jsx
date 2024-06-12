@@ -13,12 +13,14 @@ import { periods } from "./constants";
 import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import { buildPeriod, parseTime } from "./utils";
-import ErrorModal from "../../ErrorModal";
+import { useDispatch } from "react-redux";
+import { setErrorMessage } from "../../service/state";
 
-function Chart({ coinData, periodParams }) {
+function Chart({ coinData, periodParams, setPriceHL }) {
+  console.log('Chart');
   const [period, setPeriod] = React.useState(periods[0]);
   const [chartData, setChartData] = React.useState([]);
-  const [errorMessage, setErrorMessage] = React.useState(null);
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
     if (periodParams) {
@@ -32,16 +34,31 @@ function Chart({ coinData, periodParams }) {
   React.useEffect(() => {
     const { start, end } = buildPeriod(period);
     getAssetsHistory(coinData.id, period.interval, start, end)
-      .then((json) =>
+      .then((json) => {
         setChartData(
           json.data.map(({ time, ...rest }) => ({
             ...rest,
             date: parseTime(time, period.dateFormat),
           }))
-        )
-      )
-      .catch((error) => setErrorMessage(error.message));
-  }, [coinData.id, period]);
+        );
+
+        const pricesHL = json.data.sort((a, b) => {
+          if (a.priceUsd > b.priceUsd) {
+            return 1;
+          }
+          if (a.priceUsd < b.priceUsd) {
+            return -1;
+          }
+          return 0;
+        });
+
+        setPriceHL({
+          low: pricesHL[0].priceUsd,
+          high: pricesHL[pricesHL.length - 1].priceUsd,
+        });
+      })
+      .catch((error) => dispatch(setErrorMessage(error.message)));
+  }, [coinData.id, period, setPriceHL, dispatch]);
 
   return (
     <>
@@ -59,7 +76,13 @@ function Chart({ coinData, periodParams }) {
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="date" />
-          <YAxis domain={["dataMin", "dataMax"]} />
+          <YAxis
+            domain={["auto", "auto"]}
+            orientation="right"
+            mirror
+            tickLine={false}
+            tickFormatter={(value) => `${value.toFixed(2)}`}
+          />
           <Tooltip />
           <Area
             type="monotone"
@@ -81,11 +104,6 @@ function Chart({ coinData, periodParams }) {
           </Button>
         ))}
       </ButtonGroup>
-      <ErrorModal
-        show={!!errorMessage}
-        handleClose={() => setErrorMessage(null)}
-        errorMessage={errorMessage}
-      />
     </>
   );
 }

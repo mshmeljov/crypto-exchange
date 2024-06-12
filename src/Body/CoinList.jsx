@@ -1,27 +1,27 @@
 import React from "react";
 import Table from "react-bootstrap/Table";
-import CoinInfoModal from "./CoinInfo/CoinInfoModal";
 import { getAssets } from "../api/assets";
 import { coinDataFormat } from "./utils";
-import ErrorModal from "../ErrorModal";
-import Number from "../Number";
+import PriceTag from "../PriceTag";
+import { useDispatch } from "react-redux";
+import { setErrorMessage, setCoinData } from "../service/state";
 
 function CoinList() {
-  const [showInfoModal, setShowInfoModal] = React.useState(false);
-  const [coinData, setCoinData] = React.useState({});
+  console.log("CoinList");
+
   const [coinList, setCoinList] = React.useState([]);
-  const [errorMessage, setErrorMessage] = React.useState(null);
+
+  const dispatch = useDispatch();
 
   const handleOnClick = (coin) => {
-    setShowInfoModal(true);
-    setCoinData(coin);
+    dispatch(setCoinData(coin));
   };
 
   React.useEffect(() => {
     getAssets()
       .then((json) => setCoinList(json.data))
-      .catch((error) => setErrorMessage(error));
-  }, []);
+      .catch((error) => dispatch(setErrorMessage(error)));
+  }, [dispatch]);
 
   return (
     <>
@@ -46,19 +46,19 @@ function CoinList() {
                 <td>{formatedCoin.rank}</td>
                 <td>{formatedCoin.name}</td>
                 <td>
-                  <Number value={formatedCoin.priceUsd} />
+                  <PriceTag value={formatedCoin.priceUsd} />
                 </td>
                 <td>
-                  <Number value={formatedCoin.marketCapUsd} />
+                  <PriceTag value={formatedCoin.marketCapUsd} />
                 </td>
                 <td>
-                  <Number value={formatedCoin.vwap24Hr} />
+                  <PriceTag value={formatedCoin.vwap24Hr} />
                 </td>
                 <td>
-                  <Number value={formatedCoin.supply} />
+                  <PriceTag value={formatedCoin.supply} />
                 </td>
                 <td>
-                  <Number value={formatedCoin.volumeUsd24Hr} />
+                  <PriceTag value={formatedCoin.volumeUsd24Hr} />
                 </td>
                 <td>{formatedCoin.changePercent24Hr}%</td>
               </tr>
@@ -66,16 +66,6 @@ function CoinList() {
           })}
         </tbody>
       </Table>
-      <CoinInfoModal
-        show={showInfoModal}
-        setShow={setShowInfoModal}
-        coinData={coinData}
-      />
-      <ErrorModal
-        show={!!errorMessage}
-        handleClose={() => setErrorMessage(null)}
-        errorMessage={errorMessage}
-      />
     </>
   );
 }
