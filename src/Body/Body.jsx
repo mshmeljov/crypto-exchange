@@ -1,8 +1,10 @@
+import React from "react";
+import { Routes, Route } from "react-router-dom";
 import CoinList from "./CoinList";
 import SearchSideBar from "./SearchSideBar";
 import CoinInfo from "./CoinInfo/CoinInfo";
-import { Routes, Route } from "react-router-dom";
 import Contact from "./Contact";
+import GlobalInfo from "./GlobalInfo";
 import ErrorModal from "../ErrorModal";
 import CoinInfoModal from "./CoinInfo/CoinInfoModal";
 
@@ -10,6 +12,7 @@ function Body(props) {
   console.log("Body");
   return (
     <>
+      <GlobalInfo /> 
       <Routes>
         <Route path="/" element={<CoinList {...props} />} />
         <Route path="/coin/:id" element={<CoinInfo />} />

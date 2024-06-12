@@ -1,0 +1,22 @@
+
+
+.global-info-container {
+    max-width: 100%;
+    margin: auto;
+  }
+  
+  .global-info-container .card {
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  .global-info-container .card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .global-info-container .card-text {
+    font-size: 1rem;
+    color: #41464a;
+  }
+  
