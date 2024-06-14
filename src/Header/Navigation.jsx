@@ -5,19 +5,17 @@ import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Button from "react-bootstrap/Button";
 import Offcanvas from "react-bootstrap/Offcanvas";
+import Form from "react-bootstrap/Form";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setShowSideBar } from "../service/state";
-import Form from "react-bootstrap/Form";
+import { ReactComponent as Sun } from "../components/DarkMode/Sun.svg";
+import { ReactComponent as Moon } from "../components/DarkMode/Moon.svg";
+import "../components/DarkMode/DarkMode.css";
 import { AppContext } from "../providers/AppProvider";
 
-
-
-function Navigation() {
-  console.log("Navigation");
-
+function Navigation({ toggleTheme, theme }) {
   const appContext = React.useContext(AppContext);
-
   const dispatch = useDispatch();
 
   return (
@@ -67,17 +65,27 @@ function Navigation() {
               </NavDropdown>
             </Nav>
             <Navbar.Text className="justify-content-end d-flex align-items-center">
-              <Form.Check // prettier-ignore
+              <Form.Check
                 type="switch"
                 id="custom-switch"
                 label="highlights"
                 className="me-2"
                 checked={appContext.switchHighLights}
-                onChange={() => 
-                  appContext.setSwitchHighLights((oldValue) => !oldValue)
-
-                }
+                onChange={() => appContext.setSwitchHighLights((oldValue) => !oldValue)}
               />
+              <div className="dark_mode">
+                <input
+                  className="dark_mode_input"
+                  type="checkbox"
+                  id="darkmode-toggle"
+                  onChange={toggleTheme}
+                  checked={theme === 'dark'}
+                />
+                <label className="dark_mode_label" htmlFor="darkmode-toggle">
+                  <Sun />
+                  <Moon />
+                </label>
+              </div>
               <Button
                 onClick={() => dispatch(setShowSideBar(true))}
                 variant="primary"
