@@ -5,25 +5,23 @@ import Form from "react-bootstrap/Form";
 import { periods } from "./CoinInfo/constants";
 import { Link } from "react-router-dom";
 import { searchAssets } from "../api/assets";
-import { setFoundCoins } from "../service/state";
+import { setFoundCoins, setSearchPeriod } from "../service/state";
 
 function SearchForm({ closeSideBar }) {
   console.log("SearchForm");
 
   const dispatch = useDispatch();
   const foundCoins = useSelector((state) => state.foundCoins);
-  const [period, setPeriod] = React.useState(null);
+  const currentPeriod = useSelector((state) => state.searchPeriod);
 
   const handleOnSubmit = (event) => {
     event.preventDefault();
 
     const coin = event.target.coin.value;
-    const period = event.target.period.value;
+    const selectedPeriod = event.target.period.value;
 
-    setPeriod(period);
+    dispatch(setSearchPeriod(selectedPeriod));
     searchAssets(coin).then((json) => dispatch(setFoundCoins(json.data)));
-
-
   };
 
   return (
@@ -54,7 +52,7 @@ function SearchForm({ closeSideBar }) {
             .map((coin) => (
               <div key={coin.id}>
                 <Link
-                  to={`/coin/${coin.id}/${period}`}
+                  to={`/coin/${coin.id}/${currentPeriod}`}
                   onClick={() => closeSideBar()}
                 >
                   {coin.name}
