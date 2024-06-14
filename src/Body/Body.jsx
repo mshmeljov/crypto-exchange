@@ -8,6 +8,10 @@ import CoinInfoModal from "./CoinInfo/CoinInfoModal";
 
 function Body(props) {
   console.log("Body");
+
+
+  const { toggleTheme, theme } = props;
+
   return (
     <>
       <Routes>
