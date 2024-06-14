@@ -4,13 +4,11 @@ const initialState = {
   showSideBar: false,
   errorMessage: null,
   coinData: null,
-  foundCoins: [],
 };
 
 export const setShowSideBar = createAction("setShowSideBar");
 export const setErrorMessage = createAction("setErrorMessage");
 export const setCoinData = createAction("setCoinData");
-export const setFoundCoins = createAction("setFoundCoins");
 
 const appReducer = createReducer(initialState, (builder) => {
   builder
@@ -23,9 +21,6 @@ const appReducer = createReducer(initialState, (builder) => {
     })
     .addCase(setCoinData, (state, action) => {
       state.coinData = action.payload;
-    })
-    .addCase(setFoundCoins, (state, action) => {
-      state.foundCoins = action.payload;
     });
 });
 
