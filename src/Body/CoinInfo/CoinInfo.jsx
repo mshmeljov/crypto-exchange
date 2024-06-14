@@ -49,7 +49,7 @@ function CoinInfo({ coinData }) {
         </Col>
         <Col>
           <div>
-            Avarage <PriceTag value={coinInfo.vwap24Hr} />
+            Average <PriceTag value={coinInfo.vwap24Hr} />
           </div>
           <div>Change {coinInfo.changePercent24Hr}%</div>
         </Col>
